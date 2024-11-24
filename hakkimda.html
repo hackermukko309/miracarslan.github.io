@@ -6,18 +6,109 @@
     <title>HAKKIMDA</title>
 </head>
 <body>
-    <a href="index.html">ana sayfa</a>
-<a href="hakkimda.html">hakkımda</a>
-<a href="">projelerim</a>
-<a href="">hakkıma</a>
-<br>
-<h2>miraç arslan
-</h2>
-<strong>merhaba ben miraç erzincan hezarfen ahmet çelebi mtal de okuyorum kodlama yı çok seviyorum</strong> 
-<br>
-<br>
-<img src="assest/img/11.jpg" alt="">
+  <img src="./172.jpg"/img>
+<h1>Arduino programı kodları<h1>
 
-<h2>miraç arslan profil fotografı</h2>
+
+<blockquote>
+    <pre>/* "HC-SR04 Ultrasonik Mesafe Sensörü kullanarak Park Sensörü" 
+    Arduino ile HC-SR04 kullanarak cisimle olan mesafeye göre
+    BUZZER ve LEDleri çalıştıran park sensörü programı.
+    diyot.net */
+
+const int trig = 2;  // değişkenler tanımla.
+const int echo = 3;
+int mesafe;
+int zaman;
+
+const int buzzer = 4;
+const int kirmizi = 5;
+const int sari = 6;
+const int yesil = 7;
+const int mavi = 8;
+
+void setup() {
+  pinMode(trig,OUTPUT); // trig pini çıkış olsun.
+  pinMode(echo,INPUT);  // echo pini giriş olsun.
+  
+  pinMode(buzzer,OUTPUT); // buzzer pini çıkış olsun.
+  pinMode(kirmizi,OUTPUT); // LED bağlı pinler çıkış olsun.
+  pinMode(sari,OUTPUT);
+  pinMode(yesil,OUTPUT);
+  pinMode(mavi,OUTPUT);
+  Serial.begin(9600);  // seri haberleşme başlat.
+}
+
+void loop() {
+  digitalWrite(trig,HIGH);
+  delay(1);
+  digitalWrite(trig,LOW);
+  // 1 msn aralıklarla trig pinini HIGH yap.
+  
+  zaman=pulseIn(echo,HIGH);
+  mesafe=(zaman/2)/28.9;
+  // sıcaklık 25 derece için katsayı=28,9
+
+Serial.println("UZAKLIK =");
+Serial.print(mesafe);
+Serial.println("cm"); 
+Serial.println("--------------------------"); 
+
+if ((mesafe >= 0) && (mesafe <= 10)){
+  //mesafe 0 ile 10cm arasındaysa...
+  digitalWrite(kirmizi,HIGH);
+  digitalWrite(buzzer,HIGH);
+  delay(50);
+  digitalWrite(kirmizi,LOW);
+  digitalWrite(buzzer,LOW);
+  delay(250);
+}
+else if ((mesafe >= 10) && (mesafe <= 30)){
+  //mesafe 10cm-30cm arasındaysa...
+  digitalWrite(sari,HIGH);
+  digitalWrite(buzzer,HIGH);
+  delay(50);
+  digitalWrite(sari,LOW);
+  digitalWrite(buzzer,LOW);
+  delay(500);
+}
+else if ((mesafe >= 30) && (mesafe <= 50)){
+  //mesafe 30cm-50cm arasındaysa...
+  digitalWrite(yesil,HIGH);
+  digitalWrite(buzzer,HIGH);
+  delay(50);
+  digitalWrite(yesil,LOW);
+  digitalWrite(buzzer,LOW);
+  delay(750);
+}  
+else if(mesafe >= 50){
+  //mesafe 50cm'den büyükse...
+  digitalWrite(mavi,HIGH);
+  delay(50);
+  digitalWrite(mavi,LOW);
+  delay(1000);
+}  
+else if(mesafe <= 0){
+  //mesafe 0'dan küçükse...
+  digitalWrite(buzzer,LOW);
+  digitalWrite(kirmizi,LOW);
+  digitalWrite(sari,LOW);
+  digitalWrite(yesil,LOW);
+  digitalWrite(mavi,LOW);
+} 
+}
+</pre>
+</blockquote>
+
+<hr>
+<h4>Arduino Programında HC-SR04 sensörü ile önündeki cisim arasındaki mesafeyi Arduinonun hesaplamasını sağladık. Cisme olan uzaklığa göre BUZZER ve LED’lerin çalışmasını sağladık.<h4>
+<h4>Mesafe hesaplandıktan sonra Serial.println komutuyla seri port ekranından mesafe değerini yazdırdık. if-else komutları ile hesaplanan “mesafe” değerine bağlı olarak yapılacak işlemleri belirledik.<h4>
+<h4>-Eğer “mesafe” 0 ile 10cm arasındaysa; Kırmızı LED ve BUZZER 50msn çalışıp 250msn duracak. Kırmızı LED çok hızlı yanıp sönerken, BUZZER’da kırmızı LED’e çıkardığı sesle eşlik edecek.<h4>
+<h4>-Eğer “mesafe” 10cm ile 30cm arasındaysa; Sarı LED ve BUZZER 50msn çalışıp 500msn duracak. Sarı LED kırmızı LED’e göre daha yavaş yanıp sönerken, BUZZER’da sarı LED’e çıkardığı sesle eşlik edecek.<h4>
+<h4>-Eğer “mesafe” 30cm ile 50cm arasındaysa; yeşil LED ve BUZZER 50msn çalışıp 750msn duracak. Yeşil LED sarı LED’e göre daha yavaş yanıp sönerken, BUZZER’da yeşil LED’e çıkardığı sesle eşlik edecek.<h4>
+<h4>-Eğer “mesafe” 50cm’den büyükse; sadece mavi LED sürekli olarak 50msn yanıp 1sn sönük kalacak. Mavi LED 1sn aralıklı olarak yanıp sönecek.<h4>
+<h4>-Eğer hesaplanan “mesafe” değeri 0’dan küçük çıktıysa; BUZZER ve tüm LED’lerin enerjisi kesilecek.<h4>
+    <img src="./172.jpg"/img>
+
 </body>
 </html>
